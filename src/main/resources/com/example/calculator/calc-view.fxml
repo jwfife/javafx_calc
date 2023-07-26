@@ -8,11 +8,12 @@
 
 <SplitPane dividerPositions="0.1934673366834171" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" orientation="VERTICAL" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/17.0.2-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.calculator.HelloController">
    <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="100.0" prefWidth="160.0">
-     <TextField fx:id="text_space" alignment="CENTER_RIGHT" prefHeight="74.0" prefWidth="598.0" promptText="Calculate something!">
+     <TextField fx:id="text_space" alignment="CENTER_RIGHT" layoutY="27.0" prefHeight="47.0" prefWidth="598.0">
          <font>
             <Font size="24.0" />
          </font>
       </TextField>
+      <TextField fx:id="fullEquation" alignment="CENTER_RIGHT" layoutX="2.0" layoutY="2.0" opacity="0.75" prefHeight="25.0" prefWidth="590.0" />
    </AnchorPane>
    <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="100.0" prefWidth="160.0">
       <GridPane gridLinesVisible="true" prefHeight="318.0" prefWidth="598.0">

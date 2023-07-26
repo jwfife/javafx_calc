@@ -3,89 +3,159 @@ package com.example.calculator;
 import javafx.fxml.FXML;
 import javafx.scene.control.TextField;
 
+
 public class HelloController {
     @FXML
     private TextField text_space;
 
     @FXML
+    private TextField fullEquation;
+
+    @FXML
+    private String firstNum = "";
+
+    @FXML
+    private String currentNum = "";
+
+    @FXML
+    private String calcOperation;
+
+    @FXML
     void onZeroButtonClick() {
-        text_space.appendText("0");
+        fullEquation.appendText("0");
     }
 
     @FXML
     void onOneButtonClick() {
-        text_space.appendText("1");
+        setDigit("1");
     }
 
     @FXML
     void onTwoButtonClick() {
-        text_space.appendText("2");
+        setDigit("2");
     }
 
     @FXML
     void onThreeButtonClick() {
-        text_space.appendText("3");
+        setDigit("3");
     }
 
     @FXML
     void onFourButtonClick() {
-        text_space.appendText("3");
+        setDigit("4");
     }
 
     @FXML
     void onFiveButtonClick() {
-        text_space.appendText("3");
+        setDigit("5");
     }
 
     @FXML
     void onSixButtonClick() {
-        text_space.appendText("3");
+        setDigit("6");
     }
 
     @FXML
     void onSevenButtonClick() {
-        text_space.appendText("3");
+        setDigit("7");
     }
 
     @FXML
     void onEightButtonClick() {
-        text_space.appendText("3");
+        setDigit("8");
     }
 
     @FXML
     void onNineButtonClick() {
-        text_space.appendText("3");
+        setDigit("9");
     }
 
     @FXML
     void onACButtonClick() {
         text_space.setText(null);
+        fullEquation.setText(null);
+        currentNum = "";
+        firstNum = "";
     }
 
     @FXML
     void onSubtractButtonClick() {
-        text_space.appendText(" - ");
+        fullEquation.appendText(" - ");
+        prepareCalc("-");
     }
 
     @FXML
     void onAddButtonClick() {
-        text_space.appendText(" + ");
+        fullEquation.appendText(" + ");
+        prepareCalc("+");
     }
 
     @FXML
     void onMultiplyButtonClick() {
-        text_space.appendText(" * ");
+        fullEquation.appendText(" * ");
+        prepareCalc("*");
     }
 
     @FXML
     void onDivideButtonClick() {
-        text_space.appendText(" / ");
+        fullEquation.appendText(" / ");
+        prepareCalc("/");
     }
 
     @FXML
     void onEqualsButtonClick() {
-
+        fullEquation.appendText(" = ");
+        calculate();
     }
+
+    @FXML
+    public void setDigit(String num){
+        currentNum += num;
+        fullEquation.appendText(currentNum);
+        text_space.setText(currentNum);
+    }
+
+    @FXML
+    public void prepareCalc(String calcOperation){
+        this.calcOperation = calcOperation;
+        firstNum = currentNum;
+        currentNum = "";
+    }
+    @FXML
+    void calculate(){
+
+        double firstNumDouble = Double.parseDouble(firstNum);
+        double secondNumDouble = Double.parseDouble(currentNum);
+        double finalNum;
+
+        switch (calcOperation) {
+            case "-" : //subtraction case
+                    finalNum = firstNumDouble - secondNumDouble;
+                    String result = String.format("%.2f", finalNum);
+                    fullEquation.appendText(result);
+                    text_space.setText(result);
+
+            case "+" : //addition case
+
+                    finalNum = firstNumDouble + secondNumDouble;
+                    fullEquation.appendText(String.valueOf(finalNum));
+                    text_space.setText(String.valueOf(finalNum));
+
+            case "*" : //multiplication case
+
+                    finalNum = firstNumDouble * secondNumDouble;
+                    fullEquation.appendText(String.valueOf(finalNum));
+                    text_space.setText(String.valueOf(finalNum));
+
+            case "/" : //division case
+
+                    finalNum = firstNumDouble / secondNumDouble;
+                    fullEquation.appendText(String.valueOf(finalNum));
+                    text_space.setText(String.valueOf(finalNum));
+        }
+    }
+
+
 }
 /* TO DO
        make calculator work (basic functions first)
