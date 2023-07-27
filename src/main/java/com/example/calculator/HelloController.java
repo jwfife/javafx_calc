@@ -80,13 +80,11 @@ public class HelloController {
 
     @FXML
     void onNegativeButtonClick() {
-        if (!currentNum.contains("-")){
-            currentNum = "-" + currentNum;
-        }
-        currentNum = currentNum.replace("-", "");
-
-        fullEquation.setText(currentNum);
-        text_space.setText(currentNum);
+        double negNum = Double.parseDouble(currentNum);
+        negNum *= -1;
+        currentNum = String.valueOf(negNum);
+        text_space.setText(String.valueOf(negNum));
+        fullEquation.setText(String.valueOf(negNum));
     }
 
     @FXML
