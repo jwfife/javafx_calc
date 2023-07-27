@@ -31,7 +31,7 @@
             <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
          </rowConstraints>
          <Button mnemonicParsing="false" prefHeight="68.0" prefWidth="150.0" text="Button" />
-         <Button fx:id="button_negative" mnemonicParsing="false" prefHeight="68.0" prefWidth="150.0" style="-fx-background-color: #CC6B66;" text="+/-" textAlignment="CENTER" GridPane.columnIndex="1">
+         <Button fx:id="button_negative" mnemonicParsing="false" onAction="#onNegativeButtonClick" prefHeight="68.0" prefWidth="150.0" style="-fx-background-color: #CC6B66;" text="+/-" textAlignment="CENTER" GridPane.columnIndex="1">
             <font>
                <Font name="Georgia" size="36.0" />
             </font>

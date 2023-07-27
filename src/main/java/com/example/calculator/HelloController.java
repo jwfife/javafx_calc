@@ -79,6 +79,17 @@ public class HelloController {
     }
 
     @FXML
+    void onNegativeButtonClick() {
+        if (!currentNum.contains("-")){
+            currentNum = "-" + currentNum;
+        }
+        currentNum = currentNum.replace("-", "");
+
+        fullEquation.setText(currentNum);
+        text_space.setText(currentNum);
+    }
+
+    @FXML
     void onSubtractButtonClick() {
         fullEquation.appendText(" - ");
         prepareCalc("-");
@@ -111,7 +122,7 @@ public class HelloController {
     @FXML
     public void setDigit(String num){
         currentNum += num;
-        fullEquation.appendText(currentNum);
+        fullEquation.appendText(num);
         text_space.setText(currentNum);
     }
 
@@ -129,29 +140,30 @@ public class HelloController {
         double finalNum;
 
         switch (calcOperation) {
-            case "-" : //subtraction case
-                    finalNum = firstNumDouble - secondNumDouble;
-                    String result = String.format("%.2f", finalNum);
-                    fullEquation.appendText(result);
-                    text_space.setText(result);
+            case "-" -> { //subtraction case
 
-            case "+" : //addition case
+                finalNum = firstNumDouble - secondNumDouble;
+                fullEquation.appendText(String.valueOf(finalNum));
+                text_space.setText(String.valueOf(finalNum));
+            }
+            case "+" -> { //addition case
 
-                    finalNum = firstNumDouble + secondNumDouble;
-                    fullEquation.appendText(String.valueOf(finalNum));
-                    text_space.setText(String.valueOf(finalNum));
+                finalNum = firstNumDouble + secondNumDouble;
+                fullEquation.appendText(String.valueOf(finalNum));
+                text_space.setText(String.valueOf(finalNum));
+            }
+            case "*" -> { //multiplication case
 
-            case "*" : //multiplication case
+                finalNum = firstNumDouble * secondNumDouble;
+                fullEquation.appendText(String.valueOf(finalNum));
+                text_space.setText(String.valueOf(finalNum));
+            }
+            case "/" -> { //division case
 
-                    finalNum = firstNumDouble * secondNumDouble;
-                    fullEquation.appendText(String.valueOf(finalNum));
-                    text_space.setText(String.valueOf(finalNum));
-
-            case "/" : //division case
-
-                    finalNum = firstNumDouble / secondNumDouble;
-                    fullEquation.appendText(String.valueOf(finalNum));
-                    text_space.setText(String.valueOf(finalNum));
+                finalNum = firstNumDouble / secondNumDouble;
+                fullEquation.appendText(String.valueOf(finalNum));
+                text_space.setText(String.valueOf(finalNum));
+            }
         }
     }
 
@@ -159,7 +171,6 @@ public class HelloController {
 }
 /* TO DO
        make calculator work (basic functions first)
-       display full equation?
        add comments describing what things do
        swag
  */
