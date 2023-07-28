@@ -3,6 +3,8 @@ package com.example.calculator;
 import javafx.fxml.FXML;
 import javafx.scene.control.TextField;
 
+import java.util.Objects;
+
 
 public class HelloController {
     @FXML
@@ -22,7 +24,9 @@ public class HelloController {
 
     @FXML
     void onZeroButtonClick() {
-        fullEquation.appendText("0");
+        if((!Objects.equals(currentNum, ""))){
+            setDigit("0");
+        }
     }
 
     @FXML
@@ -141,34 +145,38 @@ public class HelloController {
             case "-" -> { //subtraction case
 
                 finalNum = firstNumDouble - secondNumDouble;
-                fullEquation.appendText(String.valueOf(finalNum));
-                text_space.setText(String.valueOf(finalNum));
+                setOperationText(finalNum);
             }
             case "+" -> { //addition case
 
                 finalNum = firstNumDouble + secondNumDouble;
-                fullEquation.appendText(String.valueOf(finalNum));
-                text_space.setText(String.valueOf(finalNum));
+                setOperationText(finalNum);
             }
             case "*" -> { //multiplication case
 
                 finalNum = firstNumDouble * secondNumDouble;
-                fullEquation.appendText(String.valueOf(finalNum));
-                text_space.setText(String.valueOf(finalNum));
+                setOperationText(finalNum);
             }
             case "/" -> { //division case
 
                 finalNum = firstNumDouble / secondNumDouble;
-                fullEquation.appendText(String.valueOf(finalNum));
-                text_space.setText(String.valueOf(finalNum));
+                setOperationText(finalNum);
             }
         }
+    }
+
+    void setOperationText(double finalNum){
+        fullEquation.appendText(String.valueOf(finalNum));
+        text_space.setText(String.valueOf(finalNum));
+        currentNum = String.valueOf(finalNum);
     }
 
 
 }
 /* TO DO
-       make calculator work (basic functions first)
-       add comments describing what things do
-       swag
+        extend 0 button over comma button
+        fix fullequation textfield when second number is negative
+        add functionality to % and decimal button
+
+
  */
