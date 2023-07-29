@@ -17,15 +17,26 @@ public class HelloController {
     private String firstNum = "";
 
     @FXML
-    private String currentNum = "";
+    private String currentNum = "0";
 
     @FXML
     private String calcOperation;
 
     @FXML
     void onZeroButtonClick() {
-        if((!Objects.equals(currentNum, ""))){
+        double currentNumValue = Double.parseDouble(currentNum);
+        if ((!Objects.equals(currentNum, "")) && (currentNumValue != 0)){
             setDigit("0");
+        }
+        else {
+            if (fullEquation.getLength() == 1) {
+                fullEquation.setText("0");
+                text_space.setText("0");
+            }
+            else {
+                fullEquation.appendText("0");
+                text_space.setText("0");
+            }
         }
     }
 
@@ -43,7 +54,6 @@ public class HelloController {
     void onThreeButtonClick() {
         setDigit("3");
     }
-
     @FXML
     void onFourButtonClick() {
         setDigit("4");
@@ -76,12 +86,11 @@ public class HelloController {
 
     @FXML
     void onACButtonClick() {
-        text_space.setText(null);
-        fullEquation.setText(null);
-        currentNum = "";
+        fullEquation.setText("");
+        text_space.setText("0");
+        currentNum = "0";
         firstNum = "";
     }
-
     @FXML
     void onNegativeButtonClick() {
         double negNum = Double.parseDouble(currentNum);
@@ -123,16 +132,45 @@ public class HelloController {
 
     @FXML
     public void setDigit(String num){
-        currentNum += num;
-        fullEquation.appendText(num);
-        text_space.setText(currentNum);
+        String currentNumStr = this.currentNum;
+
+        /*
+        CODE FOR KEEPING PREVIOUS CALC ON fullEquation UNTIL NEW CALC IS STARTED
+        TO FIX: FIRST NUMBERS IN A CALC SUCH AS 1234 WILL RESET AND APPEAR INDIVIDUALLY ON fullEquation
+        UNTIL OPERATION IS CHOSEN
+        EX:
+        User Select 123
+        fullEquation shows 3 (shows 1 until 2 is pressed, 2 until 3 is pressed, etc.)
+        Should show 123
+
+        String firstNumStr = this.firstNum;
+        String fullEquationStr = String.valueOf(this.fullEquation);
+
+        if (Objects.equals(firstNumStr, "") && (fullEquationStr.contains("="))){
+            fullEquation.clear();
+        }
+
+         */
+        if (Objects.equals(num, "0") && (Objects.equals(currentNumStr, "0"))) {
+            fullEquation.appendText(num);
+        }
+        else if (Objects.equals(currentNumStr, "0")){
+            currentNum = num;
+            fullEquation.appendText(currentNum);
+            text_space.setText(currentNum);
+        }
+        else {
+            currentNum += num;
+            fullEquation.appendText(num);
+            text_space.setText(currentNum);
+        }
     }
 
     @FXML
     public void prepareCalc(String calcOperation){
         this.calcOperation = calcOperation;
         firstNum = currentNum;
-        currentNum = "";
+        currentNum = "0";
     }
     @FXML
     void calculate(){
@@ -158,9 +196,20 @@ public class HelloController {
                 setOperationText(finalNum);
             }
             case "/" -> { //division case
+                if (firstNumDouble == 0){
+                    finalNum = 0;
+                    setOperationText(finalNum);
 
-                finalNum = firstNumDouble / secondNumDouble;
-                setOperationText(finalNum);
+                }
+                else if (secondNumDouble == 0) {
+                    fullEquation.appendText("Infinity");
+                    text_space.setText("Infinity");
+
+                }
+                else {
+                    finalNum = firstNumDouble / secondNumDouble;
+                    setOperationText(finalNum);
+                }
             }
         }
     }
@@ -174,8 +223,9 @@ public class HelloController {
 
 }
 /* TO DO
-        extend 0 button over comma button
-        fix fullequation textfield when second number is negative
+
+        fix fullequation so that it doesnt show 0 when clicked (ex: 0 is pressed first, then 3, shows 03)
+        fix fullequation textfield when second number is negative (add parenthesis around it?)
         add functionality to % and decimal button
 
 
