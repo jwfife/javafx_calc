@@ -39,7 +39,7 @@
                <Cursor fx:constant="HAND" />
             </cursor>
          </Button>
-         <Button fx:id="button_percent" mnemonicParsing="false" prefHeight="71.0" prefWidth="149.0" style="-fx-background-color: #CC6B66;" text="\%" textAlignment="CENTER" GridPane.columnIndex="2">
+         <Button fx:id="button_percent" mnemonicParsing="false" onAction="#onPercentButtonClick" prefHeight="71.0" prefWidth="149.0" style="-fx-background-color: #CC6B66;" text="\%" textAlignment="CENTER" GridPane.columnIndex="2">
             <font>
                <Font name="Georgia" size="36.0" />
             </font>

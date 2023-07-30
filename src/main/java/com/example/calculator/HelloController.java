@@ -1,12 +1,25 @@
 package com.example.calculator;
 
 import javafx.fxml.FXML;
+import javafx.scene.control.Button;
 import javafx.scene.control.TextField;
 
 import java.util.Objects;
 
 
 public class HelloController {
+    @FXML
+    private Button button_subtract;
+
+    @FXML
+    private Button button_add;
+
+    @FXML
+    private Button button_multiply;
+
+    @FXML
+    private Button button_divide;
+
     @FXML
     private TextField text_space;
 
@@ -86,6 +99,7 @@ public class HelloController {
 
     @FXML
     void onACButtonClick() {
+        enableOperations();
         fullEquation.setText("");
         text_space.setText("0");
         currentNum = "0";
@@ -125,39 +139,78 @@ public class HelloController {
     }
 
     @FXML
+    void onPercentButtonClick() {
+        double percentVal = Double.parseDouble(currentNum);
+        percentVal /= 100;
+
+        currentNum = String.valueOf(percentVal);
+        fullEquation.setText(String.valueOf(percentVal));
+        text_space.setText(String.valueOf(percentVal));
+    }
+
+    @FXML
     void onEqualsButtonClick() {
         fullEquation.appendText(" = ");
+        enableOperations();
         calculate();
+    }
+
+    @FXML
+    void disableOperations(){
+        button_subtract.setDisable(true);
+        button_add.setDisable(true);
+        button_divide.setDisable(true);
+        button_multiply.setDisable(true);
+    }
+
+    @FXML
+    void enableOperations(){
+        button_subtract.setDisable(false);
+        button_add.setDisable(false);
+        button_divide.setDisable(false);
+        button_multiply.setDisable(false);
     }
 
     @FXML
     public void setDigit(String num){
         String currentNumStr = this.currentNum;
+        String fullEquationStr = String.valueOf(fullEquation.getText());
+        char numChar = num.charAt(0);
+        int pos;
+        char[] fullEquationChars = fullEquationStr.toCharArray();
 
-        /*
-        CODE FOR KEEPING PREVIOUS CALC ON fullEquation UNTIL NEW CALC IS STARTED
-        TO FIX: FIRST NUMBERS IN A CALC SUCH AS 1234 WILL RESET AND APPEAR INDIVIDUALLY ON fullEquation
-        UNTIL OPERATION IS CHOSEN
-        EX:
-        User Select 123
-        fullEquation shows 3 (shows 1 until 2 is pressed, 2 until 3 is pressed, etc.)
-        Should show 123
 
-        String firstNumStr = this.firstNum;
-        String fullEquationStr = String.valueOf(this.fullEquation);
-
-        if (Objects.equals(firstNumStr, "") && (fullEquationStr.contains("="))){
-            fullEquation.clear();
+        if (Objects.equals(currentNumStr, "0") && (fullEquationStr.length() == 1)){
+            currentNum = num;
+            fullEquation.setText(currentNum);
+            text_space.setText(currentNum);
         }
-
-         */
-        if (Objects.equals(num, "0") && (Objects.equals(currentNumStr, "0"))) {
-            fullEquation.appendText(num);
-        }
-        else if (Objects.equals(currentNumStr, "0")){
+        else if ((Objects.equals(currentNumStr, "0")) && (!fullEquationStr.contains(" "))){
             currentNum = num;
             fullEquation.appendText(currentNum);
             text_space.setText(currentNum);
+        }
+        else if (Objects.equals(currentNumStr, "0")){
+            currentNum = num;
+
+            fullEquation.appendText(" ");
+            fullEquationStr = String.valueOf(fullEquation.getText());
+
+            System.out.println("-------");
+            System.out.println("Full Eq after Space: " + fullEquationStr);
+
+            pos = fullEquationStr.length() - 2;
+
+            System.out.println("Position (-2) = " + pos);
+
+            fullEquationChars[pos] = numChar;
+            fullEquationStr = String.valueOf(fullEquationChars);
+
+            System.out.println("Full Eq after replace: " + fullEquationStr);
+
+            fullEquation.setText(fullEquationStr);
+            text_space.setText(currentNum);
+
         }
         else {
             currentNum += num;
@@ -168,6 +221,7 @@ public class HelloController {
 
     @FXML
     public void prepareCalc(String calcOperation){
+        disableOperations();
         this.calcOperation = calcOperation;
         firstNum = currentNum;
         currentNum = "0";
@@ -224,9 +278,8 @@ public class HelloController {
 }
 /* TO DO
 
-        fix fullequation so that it doesnt show 0 when clicked (ex: 0 is pressed first, then 3, shows 03)
         fix fullequation textfield when second number is negative (add parenthesis around it?)
-        add functionality to % and decimal button
+        add functionality to decimal button
 
 
  */
