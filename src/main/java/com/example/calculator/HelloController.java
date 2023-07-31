@@ -4,25 +4,44 @@ import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.TextField;
 
+import java.util.Arrays;
 import java.util.Objects;
 
 
 public class HelloController {
     @FXML
     private Button button_subtract;
-
     @FXML
     private Button button_add;
-
     @FXML
     private Button button_multiply;
-
     @FXML
     private Button button_divide;
 
     @FXML
-    private TextField text_space;
+    private Button button_zero;
+    @FXML
+    private Button button_one;
+    @FXML
+    private Button button_two;
+    @FXML
+    private Button button_three;
+    @FXML
+    private Button button_four;
+    @FXML
+    private Button button_five;
+    @FXML
+    private Button button_six;
+    @FXML
+    private Button button_seven;
+    @FXML
+    private Button button_eight;
+    @FXML
+    private Button button_nine;
 
+
+    @FXML
+    private TextField text_space;
     @FXML
     private TextField fullEquation;
 
@@ -38,7 +57,7 @@ public class HelloController {
     @FXML
     void onZeroButtonClick() {
         double currentNumValue = Double.parseDouble(currentNum);
-        if ((!Objects.equals(currentNum, "")) && (currentNumValue != 0)){
+        if (currentNumValue != 0){
             setDigit("0");
         }
         else {
@@ -100,6 +119,7 @@ public class HelloController {
     @FXML
     void onACButtonClick() {
         enableOperations();
+        enableNumbers();
         fullEquation.setText("");
         text_space.setText("0");
         currentNum = "0";
@@ -118,24 +138,28 @@ public class HelloController {
     void onSubtractButtonClick() {
         fullEquation.appendText(" - ");
         prepareCalc("-");
+        enableNumbers();
     }
 
     @FXML
     void onAddButtonClick() {
         fullEquation.appendText(" + ");
         prepareCalc("+");
+        enableNumbers();
     }
 
     @FXML
     void onMultiplyButtonClick() {
         fullEquation.appendText(" * ");
         prepareCalc("*");
+        enableNumbers();
     }
 
     @FXML
     void onDivideButtonClick() {
         fullEquation.appendText(" / ");
         prepareCalc("/");
+        enableNumbers();
     }
 
     @FXML
@@ -152,6 +176,7 @@ public class HelloController {
     void onEqualsButtonClick() {
         fullEquation.appendText(" = ");
         enableOperations();
+        disableNumbers();
         calculate();
     }
 
@@ -172,46 +197,103 @@ public class HelloController {
     }
 
     @FXML
+    void disableNumbers(){
+        button_zero.setDisable(true);
+        button_one.setDisable(true);
+        button_two.setDisable(true);
+        button_three.setDisable(true);
+        button_four.setDisable(true);
+        button_five.setDisable(true);
+        button_six.setDisable(true);
+        button_seven.setDisable(true);
+        button_eight.setDisable(true);
+        button_nine.setDisable(true);
+    }
+
+    @FXML
+    void enableNumbers(){
+        button_zero.setDisable(false);
+        button_one.setDisable(false);
+        button_two.setDisable(false);
+        button_three.setDisable(false);
+        button_four.setDisable(false);
+        button_five.setDisable(false);
+        button_six.setDisable(false);
+        button_seven.setDisable(false);
+        button_eight.setDisable(false);
+        button_nine.setDisable(false);
+    }
+
+    @FXML
     public void setDigit(String num){
         String currentNumStr = this.currentNum;
         String fullEquationStr = String.valueOf(fullEquation.getText());
         char numChar = num.charAt(0);
         int pos;
-        char[] fullEquationChars = fullEquationStr.toCharArray();
+        char[] fullEquationChars;
+        char[] newFullEquationChar;
+        String spaceStr = " ";
 
-
+        /*
+        Makes it so the first non-zero number entered into the calculator replaces the first spot,
+        rather than appending to 0 (i.e. shows 5 instead of 05)
+         */
         if (Objects.equals(currentNumStr, "0") && (fullEquationStr.length() == 1)){
             currentNum = num;
             fullEquation.setText(currentNum);
             text_space.setText(currentNum);
         }
-        else if ((Objects.equals(currentNumStr, "0")) && (!fullEquationStr.contains(" "))){
+
+        /*
+        Appends the next entered value onto the previous before the operation is chosen.
+        Essentially takes care of the first variable before moving onto operation.
+         */
+        else if (Objects.equals(currentNumStr, "0") && (!fullEquationStr.contains(" "))){
             currentNum = num;
             fullEquation.appendText(currentNum);
             text_space.setText(currentNum);
         }
+
+        /*
+        Section is for the second number after the operation type is entered
+        Appends spaces in order to account for charArray replacing of values
+        Does the same thing for the first number by swapping out 0 for the first non-zero entered
+         */
         else if (Objects.equals(currentNumStr, "0")){
             currentNum = num;
 
             fullEquation.appendText(" ");
+            fullEquation.appendText(" ");
             fullEquationStr = String.valueOf(fullEquation.getText());
-
-            System.out.println("-------");
-            System.out.println("Full Eq after Space: " + fullEquationStr);
 
             pos = fullEquationStr.length() - 2;
 
-            System.out.println("Position (-2) = " + pos);
-
+            fullEquationChars = fullEquationStr.toCharArray();
             fullEquationChars[pos] = numChar;
-            fullEquationStr = String.valueOf(fullEquationChars);
 
-            System.out.println("Full Eq after replace: " + fullEquationStr);
+            /*
+            If there is an extra space after a number is entered, i.e. "3 x 4 ", copies array over to new char array
+            excluding the final character (the space)
+            Sets fullEquationStr to the new char array.
+            */
+            if (String.valueOf((fullEquationChars[fullEquationChars.length - 1])).equals(spaceStr)){
+                newFullEquationChar = Arrays.copyOfRange(fullEquationChars, 0, (fullEquationChars.length - 1));
+                fullEquationStr = String.valueOf(newFullEquationChar);
+            }
+
+            //Otherwise, if there is no space, continues with the current/original full equation character array
+            else {
+                fullEquationStr = String.valueOf(fullEquationChars);
+            }
 
             fullEquation.setText(fullEquationStr);
             text_space.setText(currentNum);
 
         }
+
+        /*Adds extra numbers onto the currentNum (i.e. first variable is 32, to make it 321 you click 1, and it
+        adds it to the end of the string and appends to the fullEquation)
+         */
         else {
             currentNum += num;
             fullEquation.appendText(num);
@@ -277,9 +359,6 @@ public class HelloController {
 
 }
 /* TO DO
-
         fix fullequation textfield when second number is negative (add parenthesis around it?)
         add functionality to decimal button
-
-
  */
