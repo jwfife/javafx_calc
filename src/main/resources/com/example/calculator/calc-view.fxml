@@ -93,7 +93,7 @@
                <Cursor fx:constant="HAND" />
             </cursor>
          </Button>
-         <Button fx:id="button_decimal" mnemonicParsing="false" prefHeight="68.0" prefWidth="150.0" text="." GridPane.columnIndex="2" GridPane.rowIndex="4">
+         <Button fx:id="button_decimal" mnemonicParsing="false" onAction="#onDecimalButtonClick" prefHeight="68.0" prefWidth="150.0" text="." GridPane.columnIndex="2" GridPane.rowIndex="4">
             <font>
                <Font name="Georgia" size="36.0" />
             </font>

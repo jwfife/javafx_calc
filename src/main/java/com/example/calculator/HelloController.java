@@ -17,6 +17,8 @@ public class HelloController {
     private Button button_multiply;
     @FXML
     private Button button_divide;
+    @FXML
+    private Button button_equals;
 
     @FXML
     private Button button_zero;
@@ -38,6 +40,8 @@ public class HelloController {
     private Button button_eight;
     @FXML
     private Button button_nine;
+    @FXML
+    private Button button_decimal;
 
 
     @FXML
@@ -56,6 +60,7 @@ public class HelloController {
 
     @FXML
     void onZeroButtonClick() {
+        button_equals.setDisable(false);
         double currentNumValue = Double.parseDouble(currentNum);
         if (currentNumValue != 0){
             setDigit("0");
@@ -117,6 +122,20 @@ public class HelloController {
     }
 
     @FXML
+    void onDecimalButtonClick() {
+        String text_spaceStr = String.valueOf(text_space.getText());
+        if (text_spaceStr.contains(".")){
+            button_decimal.setDisable(true);
+        }
+        else{
+            text_space.appendText(".");
+            fullEquation.appendText(".");
+            currentNum += ".";
+            button_equals.setDisable(true);
+        }
+    }
+
+    @FXML
     void onACButtonClick() {
         enableOperations();
         enableNumbers();
@@ -127,12 +146,64 @@ public class HelloController {
     }
     @FXML
     void onNegativeButtonClick() {
-        double negNum = Double.parseDouble(currentNum);
-        negNum *= -1;
-        currentNum = String.valueOf(negNum);
-        text_space.setText(String.valueOf(negNum));
-        fullEquation.setText(String.valueOf(negNum));
+        if (currentNum.contains(".")) {
+            double negNumDouble = Double.parseDouble(currentNum);
+            negativeDecimal(negNumDouble);
+        } else {
+            int negNumInteger = Integer.parseInt(currentNum);
+            negativeInteger(negNumInteger);
+        }
     }
+
+    @FXML
+    void negativeDecimal(double negNum) {
+        negNum *= -1;
+        int currentNumLen = currentNum.length();
+        currentNum = String.valueOf(negNum);
+
+        String fullEquationStr = String.valueOf(fullEquation.getText());
+        char[] fullEquationChars = fullEquationStr.toCharArray();
+        char[] newFullEquationChar;
+        int shortenedFullEquation = fullEquationChars.length - currentNumLen;
+
+        newFullEquationChar = Arrays.copyOfRange(fullEquationChars, 0, (shortenedFullEquation));
+        fullEquationStr = String.valueOf(newFullEquationChar);
+
+        fullEquation.setText(fullEquationStr);
+        text_space.setText(String.valueOf(negNum));
+
+        if (fullEquationStr.contains(" ")) {
+            fullEquation.appendText("(" + currentNum + ")");
+        } else {
+            fullEquation.setText(currentNum);
+        }
+    }
+
+    @FXML
+    void negativeInteger(int negNum){
+        negNum *= -1;
+        int currentNumLen = currentNum.length();
+        currentNum = String.valueOf(negNum);
+
+        String fullEquationStr = String.valueOf(fullEquation.getText());
+        char[] fullEquationChars = fullEquationStr.toCharArray();
+        char[] newFullEquationChar;
+        int shortenedFullEquation = fullEquationChars.length - currentNumLen;
+
+        newFullEquationChar = Arrays.copyOfRange(fullEquationChars, 0, (shortenedFullEquation));
+        fullEquationStr = String.valueOf(newFullEquationChar);
+
+        fullEquation.setText(fullEquationStr);
+        text_space.setText(String.valueOf(negNum));
+
+        if (fullEquationStr.contains(" ")) {
+            fullEquation.appendText("(" + currentNum + ")");
+        } else {
+            fullEquation.setText(currentNum);
+        }
+    }
+
+
 
     @FXML
     void onSubtractButtonClick() {
@@ -166,10 +237,25 @@ public class HelloController {
     void onPercentButtonClick() {
         double percentVal = Double.parseDouble(currentNum);
         percentVal /= 100;
+        String fullEquationStr = String.valueOf(fullEquation.getText());
+        char[] fullEquationChars = fullEquationStr.toCharArray();
+        char[] newFullEquationChar;
+        int shortenedFullEq = fullEquationChars.length - currentNum.length();
 
         currentNum = String.valueOf(percentVal);
-        fullEquation.setText(String.valueOf(percentVal));
+
+        newFullEquationChar = Arrays.copyOfRange(fullEquationChars, 0, (shortenedFullEq));
+        fullEquationStr = String.valueOf(newFullEquationChar);
+
         text_space.setText(String.valueOf(percentVal));
+
+        if (fullEquationStr.contains(" ")) {
+            fullEquation.setText(fullEquationStr);
+            fullEquation.appendText(String.valueOf((percentVal)));
+        }
+        else {
+            fullEquation.setText(String.valueOf(percentVal));
+        }
     }
 
     @FXML
@@ -208,6 +294,7 @@ public class HelloController {
         button_seven.setDisable(true);
         button_eight.setDisable(true);
         button_nine.setDisable(true);
+        button_decimal.setDisable(true);
     }
 
     @FXML
@@ -222,10 +309,12 @@ public class HelloController {
         button_seven.setDisable(false);
         button_eight.setDisable(false);
         button_nine.setDisable(false);
+        button_decimal.setDisable(false);
     }
 
     @FXML
     public void setDigit(String num){
+        button_equals.setDisable(false);
         String currentNumStr = this.currentNum;
         String fullEquationStr = String.valueOf(fullEquation.getText());
         char numChar = num.charAt(0);
@@ -356,9 +445,4 @@ public class HelloController {
         currentNum = String.valueOf(finalNum);
     }
 
-
 }
-/* TO DO
-        fix fullequation textfield when second number is negative (add parenthesis around it?)
-        add functionality to decimal button
- */
