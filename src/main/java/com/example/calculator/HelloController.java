@@ -62,6 +62,8 @@ public class HelloController {
     void onZeroButtonClick() {
         button_equals.setDisable(false);
         double currentNumValue = Double.parseDouble(currentNum);
+
+        //if currentnum is not 0, appends 0 (so it doesnt show up as 0000)
         if (currentNumValue != 0){
             setDigit("0");
         }
@@ -121,6 +123,7 @@ public class HelloController {
         setDigit("9");
     }
 
+    //appends the decimal to the textfield if there isnt one there already
     @FXML
     void onDecimalButtonClick() {
         String text_spaceStr = String.valueOf(text_space.getText());
@@ -135,6 +138,7 @@ public class HelloController {
         }
     }
 
+    //clears everything, starts anew
     @FXML
     void onACButtonClick() {
         enableOperations();
@@ -144,6 +148,8 @@ public class HelloController {
         currentNum = "0";
         firstNum = "";
     }
+
+    //switches currentnum to a negative/positive value depending on its current state
     @FXML
     void onNegativeButtonClick() {
         if (currentNum.contains(".")) {
@@ -155,6 +161,7 @@ public class HelloController {
         }
     }
 
+    //negates the value of the current num and copies the old string onto the new one, replacing currentnum with neg double
     @FXML
     void negativeDecimal(double negNum) {
         negNum *= -1;
@@ -179,6 +186,7 @@ public class HelloController {
         }
     }
 
+    //negates the value of the current num and copies the old string onto the new one, replacing currentnum with neg int
     @FXML
     void negativeInteger(int negNum){
         negNum *= -1;
@@ -233,6 +241,7 @@ public class HelloController {
         enableNumbers();
     }
 
+    //divides current num value by 100
     @FXML
     void onPercentButtonClick() {
         double percentVal = Double.parseDouble(currentNum);
@@ -244,20 +253,27 @@ public class HelloController {
 
         currentNum = String.valueOf(percentVal);
 
+        //copies old equation over to new equation without currentnum
         newFullEquationChar = Arrays.copyOfRange(fullEquationChars, 0, (shortenedFullEq));
         fullEquationStr = String.valueOf(newFullEquationChar);
 
         text_space.setText(String.valueOf(percentVal));
 
+        //case for if percentage is used on second number in equation
         if (fullEquationStr.contains(" ")) {
             fullEquation.setText(fullEquationStr);
             fullEquation.appendText(String.valueOf((percentVal)));
         }
+        //case for percentage on first num in equation
         else {
             fullEquation.setText(String.valueOf(percentVal));
         }
     }
 
+    /*adds the "=" to the text fields, re-enables operations and disables numbers so that user cant type new number
+    without clearing old equation
+    also calculates
+     */
     @FXML
     void onEqualsButtonClick() {
         fullEquation.appendText(" = ");
@@ -266,6 +282,7 @@ public class HelloController {
         calculate();
     }
 
+    //disables operations
     @FXML
     void disableOperations(){
         button_subtract.setDisable(true);
@@ -274,6 +291,7 @@ public class HelloController {
         button_multiply.setDisable(true);
     }
 
+    //enables operations
     @FXML
     void enableOperations(){
         button_subtract.setDisable(false);
@@ -282,6 +300,7 @@ public class HelloController {
         button_multiply.setDisable(false);
     }
 
+    //disables numpad and decimal
     @FXML
     void disableNumbers(){
         button_zero.setDisable(true);
@@ -297,6 +316,7 @@ public class HelloController {
         button_decimal.setDisable(true);
     }
 
+    //enables the numpad and the decimal
     @FXML
     void enableNumbers(){
         button_zero.setDisable(false);
@@ -390,6 +410,7 @@ public class HelloController {
         }
     }
 
+    //sets the operation of the eq and disables other ops, setting first num to current and resetting current
     @FXML
     public void prepareCalc(String calcOperation){
         disableOperations();
@@ -421,16 +442,28 @@ public class HelloController {
                 setOperationText(finalNum);
             }
             case "/" -> { //division case
-                if (firstNumDouble == 0){
+
+                // 0 divided by 0
+                if (firstNumDouble == 0 && secondNumDouble == 0) {
+                    fullEquation.appendText("Error");
+                    text_space.setText("Error");
+                }
+
+                // 0 divided by non-zero
+                else if (firstNumDouble == 0) {
                     finalNum = 0;
                     setOperationText(finalNum);
 
                 }
+
+                // non-zero divided by 0
                 else if (secondNumDouble == 0) {
                     fullEquation.appendText("Infinity");
                     text_space.setText("Infinity");
 
                 }
+
+                //non-zero divided by non-zero
                 else {
                     finalNum = firstNumDouble / secondNumDouble;
                     setOperationText(finalNum);
